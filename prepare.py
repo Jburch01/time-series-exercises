@@ -54,8 +54,8 @@ def prep_store_data():
     df = wrangle_store_data()
     df['sale_date'] = pd.to_datetime(df['sale_date'])
     df = df.set_index('sale_date')
-    df['month'] = df.index.month
-    df['day'] = df.index.day
+    df['month'] = df.index.month_name()
+    df['day'] = df.index.day_name()
     df['sales_total'] = df.sale_amount * df.item_price
     return df
 
@@ -65,7 +65,8 @@ def prep_germany_opsd():
     df = germany_opsd()
     df.Date = pd.to_datetime(df['Date'])
     df = df.set_index('Date')
-    df['month'] = df.index.month
+    df['month'] = df.index.month_name()
     df['year'] = df.index.year
-    df.fillna(df.mean(), inplace=True)
+    df.fillna(0, inplace=True)
+    df['Wind_Solar'] = df['wind'] + df['solar']
     return df
